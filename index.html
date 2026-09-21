@@ -59,14 +59,18 @@ h1,h2,h3{font-family:var(--display);font-weight:700;font-style:italic;line-heigh
 @keyframes drift{to{transform:scale(1.1) translate(-1.5%,-1%)}}
 .hero .wrap{width:100%;padding-block:calc(120px + env(safe-area-inset-top,0px)) 56px}
 .eyebrow{color:var(--sky);margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:"";width:28px;height:2px;background:var(--red)}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:2px;background:var(--red);flex:none}
+/* The eyebrow and the lead run exactly as wide as the TRACK box: --box is the
+   logo's measured width (script at the bottom). Without JS they fall back to before. */
+.hero .eyebrow{font-size:clamp(12.5px,1.15vw,14.5px);width:var(--box,auto);max-width:100%}
+.hero .eyebrow::after{flex:1;min-width:28px}
 .hero h1{font-size:clamp(64px,11vw,148px);max-width:11ch;text-shadow:0 4px 40px rgba(0,0,0,.45)}
 .hero h1 .l2{display:inline-block}
 .hero h1 .tracklogo{display:block;width:100%;height:auto;margin-top:.14em;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45))}
 .top .mark svg{width:54px;height:54px}
 .top .mark b{font-size:38px}
 .hero h1 em{color:var(--red);font-style:inherit}
-.hero p.lead{font-size:clamp(18px,2vw,21px);max-width:36em;margin:22px 0 30px;color:#e6e9ee}
+.hero p.lead{font-size:clamp(18px,2vw,21px);max-width:var(--box,36em);margin:22px 0 30px;color:#e6e9ee}
 .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 
 /* HUD strip: the numbers she actually hears with every question */
@@ -491,4 +495,14 @@ document.querySelectorAll(".tela").forEach((tela) => {
   };
   setTimeout(next, 800 + Math.random() * 2000);
 });
+
+// The hero eyebrow and lead take the width of the TRACK box.
+(() => {
+  const logo = document.querySelector(".hero .tracklogo"), hero = document.querySelector(".hero");
+  if (!logo || !hero) return;
+  const set = () => hero.style.setProperty("--box", logo.getBoundingClientRect().width + "px");
+  new ResizeObserver(set).observe(logo);
+  if (document.fonts) document.fonts.ready.then(set);
+  set();
+})();
 </script>
