@@ -159,6 +159,8 @@ h2{font-size:clamp(44px,6.4vw,84px)}
 /* footer */
 footer{border-top:1px solid var(--line);padding-block:36px calc(36px + env(safe-area-inset-bottom,0px))}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;color:var(--mute);font-size:14px}
+footer .visits{font-size:12px;letter-spacing:.08em}
+footer .visits b{color:var(--paper);font-weight:500}
 footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offset:4px}
 
 @media (max-width:860px){
@@ -346,6 +348,7 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
   <div class="wrap">
     <a class="mark" href="#"><svg aria-hidden="true"><use href="#t73"/></svg><b>Track<i>73</i></b></a>
     <span>Made by a pilot for the <a href="#" id="channel">VRFlights73</a> channel · © 2026</span>
+    <span class="mono visits" id="visits" hidden></span>
   </div>
 </footer>
 
@@ -418,4 +421,22 @@ form.addEventListener("submit", async (e) => {
     btn.disabled = false; btn.textContent = "Join the waitlist";
   }
 });
+
+/* visit counter: one hit per browser (abacus.jasoncameron.dev, no account) */
+(async () => {
+  if (!/(^|\.)track73\.com\.br$/.test(location.hostname)) return;
+  const base = "https://abacus.jasoncameron.dev";
+  let seen = false;
+  try { seen = localStorage.getItem("t73-seen") === "1"; } catch {}
+  try {
+    const r = await fetch(`${base}/${seen ? "get" : "hit"}/track73.com.br/visitors`);
+    if (!r.ok) return;
+    const { value } = await r.json();
+    if (typeof value !== "number" || value < 1) return;
+    try { localStorage.setItem("t73-seen", "1"); } catch {}
+    const el = document.getElementById("visits");
+    el.innerHTML = `<b>${value.toLocaleString("en-US")}</b> ${value === 1 ? "visitor" : "visitors"}`;
+    el.hidden = false;
+  } catch {}
+})();
 </script>
