@@ -119,7 +119,7 @@ h2{font-size:clamp(44px,6.4vw,84px)}
   box-shadow:0 30px 60px -30px rgba(0,0,0,.9),0 0 0 1px var(--line)}
 .tela img{position:absolute;inset:0;width:100%;height:auto;opacity:0;transition:opacity .35s ease}
 .tela img.on{opacity:1}
-.telas figcaption{grid-column:1/-1;color:var(--mute);font-size:11px;margin-top:40px;transform:rotate(4deg);transform-origin:left}
+.telas-cap{color:var(--mute);font-size:11px;margin:64px 0 0}
 @media (prefers-reduced-motion:reduce){.tela img{transition:none}}
 /* wide screens: the panels spill left past the column into the empty margin, bigger and readable */
 @media (min-width:1000px){.telas{--out:min(300px, max(0px, (100vw - 1180px) / 2 - 8px));margin-top:clamp(56px, calc(56px + var(--out) / 4), 130px)}}
@@ -263,8 +263,8 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
           <div class="tela" aria-hidden="true"><img src="img/panel-voz_0.webp" alt="" loading="lazy" class="on"><img src="img/panel-voz_1.webp" alt="" loading="lazy"><img src="img/panel-voz_2.webp" alt="" loading="lazy"><img src="img/panel-voz_3.webp" alt="" loading="lazy"></div>
           <div class="tela" aria-hidden="true"><img src="img/panel-linguas_0.webp" alt="" loading="lazy" class="on"><img src="img/panel-linguas_1.webp" alt="" loading="lazy"><img src="img/panel-linguas_2.webp" alt="" loading="lazy"><img src="img/panel-linguas_3.webp" alt="" loading="lazy"></div>
           <div class="tela" aria-hidden="true"><img src="img/panel-modos_0.webp" alt="" loading="lazy" class="on"><img src="img/panel-modos_1.webp" alt="" loading="lazy"><img src="img/panel-modos_2.webp" alt="" loading="lazy"><img src="img/panel-modos_3.webp" alt="" loading="lazy"></div>
-          <figcaption class="mono">The settings panel · 9 languages</figcaption>
         </figure>
+        <p class="mono telas-cap">The settings panel · 9 languages</p>
       </div>
       <div class="log" role="list">
         <header class="mono"><span>Flight 85 · SBFN</span><span>19 SEP 2026 · UTC</span></header>
