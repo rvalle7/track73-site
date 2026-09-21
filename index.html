@@ -93,6 +93,8 @@ h2{font-size:clamp(44px,6.4vw,84px)}
 .eps .mono{color:var(--red);font-size:11px}
 .eps b{font:700 italic 24px/1 var(--display)}
 .eps .all b{color:var(--sky)}
+.eps a.on{border-color:var(--red);background:var(--panel)}
+.eps a.on .mono::after{content:" · playing"}
 .langs{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .langs li{font-size:14px;padding:4px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--paper)}
 .langs small{font:500 10px/1 var(--mono);color:var(--red);letter-spacing:.06em}
@@ -221,10 +223,11 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
         </a>
       </div>
       <ul class="eps" aria-label="More episodes">
-        <li><a href="https://www.youtube.com/watch?v=hoynQO_qDJo" target="_blank" rel="noopener"><span class="mono">S1E15</span><b>Coffs Harbour</b></a></li>
-        <li><a href="https://www.youtube.com/watch?v=YoKuEgjBmTg" target="_blank" rel="noopener"><span class="mono">S1E12</span><b>Norfolk</b></a></li>
-        <li><a href="https://www.youtube.com/watch?v=SgkLutxw6ws" target="_blank" rel="noopener"><span class="mono">S1E11</span><b>Springfield</b></a></li>
-        <li><a href="https://www.youtube.com/watch?v=9J_wxIY4doc" target="_blank" rel="noopener"><span class="mono">S1E9</span><b>Marbella</b></a></li>
+        <li><a class="on" data-yt="0p28hAwVqM4" href="https://www.youtube.com/watch?v=0p28hAwVqM4" target="_blank" rel="noopener"><span class="mono">S1E16</span><b>Lisbon</b></a></li>
+        <li><a data-yt="hoynQO_qDJo" href="https://www.youtube.com/watch?v=hoynQO_qDJo" target="_blank" rel="noopener"><span class="mono">S1E15</span><b>Coffs Harbour</b></a></li>
+        <li><a data-yt="YoKuEgjBmTg" href="https://www.youtube.com/watch?v=YoKuEgjBmTg" target="_blank" rel="noopener"><span class="mono">S1E12</span><b>Norfolk</b></a></li>
+        <li><a data-yt="SgkLutxw6ws" href="https://www.youtube.com/watch?v=SgkLutxw6ws" target="_blank" rel="noopener"><span class="mono">S1E11</span><b>Springfield</b></a></li>
+        <li><a data-yt="9J_wxIY4doc" href="https://www.youtube.com/watch?v=9J_wxIY4doc" target="_blank" rel="noopener"><span class="mono">S1E9</span><b>Marbella</b></a></li>
         <li><a class="all" href="https://www.youtube.com/@VRFlights73/videos" target="_blank" rel="noopener"><span class="mono">YouTube</span><b>All episodes →</b></a></li>
       </ul>
     </div>
@@ -376,12 +379,19 @@ reel.innerHTML = CARDS.map(c => card(c, false)).join("") + CARDS.map(c => card(c
 
 const poster = document.getElementById("poster");
 const canEmbed = /(^|\.)track73\.com\.br$|github\.io$|^localhost$/.test(location.hostname);
-if (YOUTUBE_ID && canEmbed) poster.addEventListener("click", (e) => {
-  e.preventDefault();
+const play = (id) => {
   document.getElementById("video").innerHTML =
-    `<iframe src="https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1" title="Track73 flight video"
+    `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" title="Track73 flight video"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
-});
+};
+if (YOUTUBE_ID && canEmbed) poster.addEventListener("click", (e) => { e.preventDefault(); play(YOUTUBE_ID); });
+if (canEmbed) document.querySelectorAll(".eps a[data-yt]").forEach(a => a.addEventListener("click", (e) => {
+  e.preventDefault();
+  document.querySelectorAll(".eps a.on").forEach(o => o.classList.remove("on"));
+  a.classList.add("on");
+  play(a.dataset.yt);
+  document.getElementById("video").scrollIntoView({ behavior: "smooth", block: "center" });
+}));
 if (CHANNEL_URL) {
   document.getElementById("channel").href = CHANNEL_URL;
 }
