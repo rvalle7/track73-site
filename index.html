@@ -1,0 +1,406 @@
+<title>Track73</title>
+<meta name="description" content="Track73 — a voice companion for Microsoft Flight Simulator 2024. Ask about anything out the window.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 560'%3E%3Crect fill='%23e10435' width='560' height='560' rx='40'/%3E%3Cpath fill='%23f2f2f2' d='M269.1,160.4v25.9l-91.4,209.3h-96.1l86-197.6H58.7l15.1-37.6h195.3Z'/%3E%3Cpath fill='%23f2f2f2' d='M491.3,316.3c0,49.7-43,83.3-113.2,83.3s-78.3-9.4-102.5-34.9l20.8-26.5h5.7c16.5,15.8,39,23.5,62.2,23.5s36.3-9.4,36.3-30.6v-28.9c0-18.1-9.1-26.5-24.2-26.5s-20.8,3-32.6,9.4l-22.5-24.2,51.7-62.8h-88l14.8-37.6h181.4v24.9l-49.4,60.8c40.7,8.1,59.5,33.9,59.5,70.2h0Z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Economica:ital,wght@0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Track73 — one committed look: the cockpit at dusk, postcards as windows.
+   Brand: red #e10435 and the logo white #f2f2f2, straight from the icon. */
+:root{
+  --ink:#0d1016;        /* panel black, a breath of blue */
+  --panel:#151a22;      /* raised glass */
+  --line:#262d39;
+  --paper:#f2f2f2;      /* the white of the 73 */
+  --mute:#9ba5b5;
+  --red:#e10435;        /* Track73 red */
+  --red-deep:#b0022a;
+  --sky:#bfe2f2;        /* postcard sky, HUD text */
+  --display:"Economica","Arial Narrow",sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--paper);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+h1,h2,h3{font-family:var(--display);font-weight:700;font-style:italic;line-height:.95;letter-spacing:.005em;text-wrap:balance;margin:0}
+:focus-visible{outline:2px solid var(--sky);outline-offset:3px;border-radius:4px}
+
+/* ---------- brand mark ---------- */
+.mark{display:inline-flex;align-items:center;gap:12px;text-decoration:none}
+.mark svg{width:40px;height:40px;flex:none}
+.mark b{font:700 italic 28px/1 var(--display);letter-spacing:.01em}
+.mark b i{font-style:inherit;color:var(--red)}
+
+/* ---------- header ---------- */
+.top{position:absolute;inset:0 0 auto 0;z-index:5;padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:22px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;border:0;border-radius:999px;
+  font:600 15px/1 var(--body);letter-spacing:.02em;padding:14px 22px;text-decoration:none;cursor:pointer;
+  box-shadow:0 8px 24px -10px rgba(225,4,53,.8);transition:transform .15s ease,background .15s ease}
+.btn:hover{background:var(--red-deep);transform:translateY(-1px)}
+.btn.ghost{background:rgba(13,16,22,.45);box-shadow:none;border:1px solid rgba(242,242,242,.35);backdrop-filter:blur(8px)}
+.btn.ghost:hover{background:rgba(13,16,22,.7)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:clamp(620px,92vh,880px);display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;z-index:-2;transform:scale(1.04);animation:drift 26s ease-in-out infinite alternate}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(13,16,22,.55) 0%,rgba(13,16,22,0) 22%,rgba(13,16,22,0) 42%,rgba(13,16,22,.78) 72%,var(--ink) 100%)}
+@keyframes drift{to{transform:scale(1.1) translate(-1.5%,-1%)}}
+.hero .wrap{width:100%;padding-block:0 56px}
+.eyebrow{color:var(--sky);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--red)}
+.hero h1{font-size:clamp(64px,11vw,148px);max-width:11ch;text-shadow:0 4px 40px rgba(0,0,0,.45)}
+.hero h1 em{color:var(--red);font-style:inherit}
+.hero p.lead{font-size:clamp(18px,2vw,21px);max-width:36em;margin:22px 0 30px;color:#e6e9ee}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* HUD strip: the numbers she actually hears with every question */
+.hud{margin-top:40px;display:flex;flex-wrap:wrap;gap:8px 26px;padding-top:18px;border-top:1px solid rgba(191,226,242,.22);color:var(--sky)}
+.hud span{white-space:nowrap}
+.hud .ptt{color:#fff;display:inline-flex;align-items:center;gap:8px}
+.hud .ptt::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(225,4,53,.7);animation:ptt 1.8s infinite}
+@keyframes ptt{70%{box-shadow:0 0 0 9px rgba(225,4,53,0)}100%{box-shadow:0 0 0 0 rgba(225,4,53,0)}}
+.hud small{font-size:10.5px;color:var(--mute);margin-left:8px;letter-spacing:.06em}
+
+/* ---------- sections ---------- */
+section{padding-block:clamp(72px,10vw,128px)}
+.kicker{color:var(--red);margin-bottom:14px}
+h2{font-size:clamp(44px,6.4vw,84px)}
+.sub{color:var(--mute);max-width:40em;margin:18px 0 0;font-size:18px}
+
+/* video */
+.video{margin-top:44px;position:relative;aspect-ratio:16/9;max-width:100%;border-radius:14px;overflow:hidden;background:#000;
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.9),0 0 0 1px var(--line)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.poster{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#fff;text-decoration:none}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.05) brightness(.7)}
+.poster .play{position:relative;display:grid;place-items:center;gap:14px}
+.poster .play i{width:84px;height:84px;border-radius:50%;background:var(--red);display:grid;place-items:center;box-shadow:0 0 0 10px rgba(225,4,53,.25)}
+.poster .play i::after{content:"";border-left:24px solid #fff;border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:6px}
+
+.specs{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.specs li{border:1px solid rgba(242,242,242,.28);border-radius:999px;padding:7px 12px;color:#e6e9ee;background:rgba(13,16,22,.35);font-size:11.5px}
+.eps{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.eps a{display:grid;gap:4px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;text-decoration:none;transition:border-color .15s ease,background .15s ease}
+.eps a:hover{border-color:var(--red);background:var(--panel)}
+.eps .mono{color:var(--red);font-size:11px}
+.eps b{font:700 italic 24px/1 var(--display)}
+.eps .all b{color:var(--sky)}
+.langs{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.langs li{font-size:14px;padding:4px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--paper)}
+.langs small{font:500 10px/1 var(--mono);color:var(--red);letter-spacing:.06em}
+.reel{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+
+/* the real exchange */
+.radio{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,72px);align-items:start}
+.log{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,32px);display:grid;gap:22px}
+.log header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute);padding-bottom:16px;border-bottom:1px dashed var(--line)}
+.turn{display:grid;gap:10px}
+.tel{color:var(--mute);font-size:11px}
+.q,.a{margin:0;max-width:34em}
+.q{color:var(--sky);font-weight:500}
+.q::before{content:"PILOT";font:500 10.5px/1 var(--mono);letter-spacing:.12em;color:var(--mute);display:block;margin-bottom:6px}
+.a{padding-left:16px;border-left:2px solid var(--red)}
+.a::before{content:"TRACK";font:500 10.5px/1 var(--mono);letter-spacing:.12em;color:var(--red);display:block;margin-bottom:6px}
+.pt{display:block;margin-top:6px;color:#6f7888;font-size:13.5px;font-style:italic}
+
+/* features */
+.feats{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(28px,3vw,40px) clamp(24px,3vw,36px)}
+.feat{display:grid;gap:14px;align-content:start}
+.feat figure{margin:0;aspect-ratio:16/10;max-width:100%;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.feat figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.feat:hover figure img{transform:scale(1.04)}
+.feat h3{font-size:34px}
+.feat p{margin:0;color:#c9ced8;max-width:32em}
+.not{margin-top:64px;padding:26px clamp(20px,3vw,32px);border-radius:14px;border:1px solid var(--line);display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.not svg{width:92px;flex:none}
+.not p{margin:0;flex:1 1 320px;font-size:19px}
+.not strong{font-family:var(--display);font-style:italic;font-size:28px;display:block;line-height:1;margin-bottom:6px}
+
+/* postcards */
+.cards-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.reel{margin-top:44px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.reel ul{list-style:none;margin:0;padding:0 0 8px;display:flex;gap:18px;width:max-content;animation:reel 80s linear infinite}
+.reel:hover ul{animation-play-state:paused}
+@keyframes reel{to{transform:translateX(-50%)}}
+.pc{width:clamp(260px,30vw,380px);background:#f4efe4;color:#2b2a27;padding:10px 10px 12px;border-radius:4px;box-shadow:0 18px 40px -18px rgba(0,0,0,.9);transform:rotate(var(--r,0deg))}
+.pc img{aspect-ratio:16/9;width:100%;object-fit:cover;border-radius:2px}
+.pc figcaption{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:10px 4px 0}
+.pc b{font:700 italic 22px/1 var(--display)}
+.pc span{font:500 10.5px/1 var(--mono);letter-spacing:.08em;color:#8a8375;white-space:nowrap}
+
+/* waitlist */
+.join{position:relative;isolation:isolate;overflow:hidden}
+.join>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.join::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(13,16,22,.92) 0%,rgba(13,16,22,.72) 55%,rgba(13,16,22,.35) 100%)}
+.join .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:clamp(32px,6vw,80px);align-items:center}
+.form{background:rgba(21,26,34,.82);backdrop-filter:blur(10px);border:1px solid rgba(242,242,242,.12);border-radius:18px;padding:clamp(22px,3vw,32px);display:grid;gap:16px}
+.form label{display:grid;gap:7px;font:500 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.form input{font:400 17px/1.3 var(--body);color:var(--paper);background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:14px 14px;width:100%}
+.form input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(191,226,242,.18)}
+.form .btn{justify-content:center;width:100%;padding:16px}
+.form .fine{margin:0;color:var(--mute);font-size:13.5px}
+.msg{margin:0;font-weight:500;color:var(--sky)}
+.msg.err{color:#ff8fa6}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding-block:36px calc(36px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;color:var(--mute);font-size:14px}
+footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offset:4px}
+
+@media (max-width:860px){
+  .radio,.join .wrap{grid-template-columns:1fr}
+  .top .btn{padding:11px 16px;font-size:14px}
+  .hud small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reel{overflow-x:auto}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="t73" viewBox="0 0 560 560">
+    <rect fill="#e10435" width="560" height="560" rx="40"/>
+    <path fill="#f2f2f2" d="M269.1,160.4v25.9l-91.4,209.3h-96.1l86-197.6H58.7l15.1-37.6h195.3Z"/>
+    <path fill="#f2f2f2" d="M491.3,316.3c0,49.7-43,83.3-113.2,83.3s-78.3-9.4-102.5-34.9l20.8-26.5h5.7c16.5,15.8,39,23.5,62.2,23.5s36.3-9.4,36.3-30.6v-28.9c0-18.1-9.1-26.5-24.2-26.5s-20.8,3-32.6,9.4l-22.5-24.2,51.7-62.8h-88l14.8-37.6h181.4v24.9l-49.4,60.8c40.7,8.1,59.5,33.9,59.5,70.2h0Z"/>
+  </symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#" aria-label="Track73 home"><svg aria-hidden="true"><use href="#t73"/></svg><b>Track<i>73</i></b></a>
+    <a class="btn" href="#join">Join the waitlist</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-block:0">
+    <img src="img/hero-rio.webp" alt="Painted postcard: the view from a helicopter cockpit over the coast of Rio de Janeiro">
+    <div class="wrap">
+      <div class="eyebrow mono">Voice companion for Microsoft Flight Simulator 2024</div>
+      <h1>She sees what <em>you</em> see.</h1>
+      <p class="lead">Press the button on your stick and ask about anything out the window. Track looks where you're looking, finds the real place, and answers out loud, while you keep flying.</p>
+      <div class="cta-row">
+        <a class="btn" href="#join">Join the waitlist</a>
+        <a class="btn ghost" href="#watch">Watch a flight</a>
+      </div>
+      <ul class="specs mono" aria-label="Requirements">
+        <li>Microsoft Flight Simulator 2024</li><li>VR headset or monitor</li><li>Windows PC</li>
+      </ul>
+      <div class="hud mono" aria-label="What Track knows at the moment you ask">
+        <span class="ptt">PTT</span>
+        <span>HDG 270°<small>MAG</small></span>
+        <span>783 FT AGL</span>
+        <span>227 KT</span>
+        <span>FERNANDO DE NORONHA</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="watch">
+    <div class="wrap">
+      <div class="kicker mono">Watch</div>
+      <h2>Real flights, real answers.</h2>
+      <p class="sub">Track On Air is the series on the VRFlights73 channel: full flights with Track in the right seat. Every answer is live, a real question asked in the air.</p>
+      <div class="video" id="video">
+        <a class="poster" href="https://www.youtube.com/watch?v=0p28hAwVqM4" id="poster" target="_blank" rel="noopener" aria-label="Play Track On Air S1E16, Lisbon">
+          <img src="img/dusk-dargaville.webp" alt="" loading="lazy">
+          <span class="play"><i></i><span class="mono">Latest episode · S1E16 · Lisbon</span></span>
+        </a>
+      </div>
+      <ul class="eps" aria-label="More episodes">
+        <li><a href="https://www.youtube.com/watch?v=hoynQO_qDJo" target="_blank" rel="noopener"><span class="mono">S1E15</span><b>Coffs Harbour</b></a></li>
+        <li><a href="https://www.youtube.com/watch?v=YoKuEgjBmTg" target="_blank" rel="noopener"><span class="mono">S1E12</span><b>Norfolk</b></a></li>
+        <li><a href="https://www.youtube.com/watch?v=SgkLutxw6ws" target="_blank" rel="noopener"><span class="mono">S1E11</span><b>Springfield</b></a></li>
+        <li><a href="https://www.youtube.com/watch?v=9J_wxIY4doc" target="_blank" rel="noopener"><span class="mono">S1E9</span><b>Marbella</b></a></li>
+        <li><a class="all" href="https://www.youtube.com/@VRFlights73/videos" target="_blank" rel="noopener"><span class="mono">YouTube</span><b>All episodes →</b></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap radio">
+      <div>
+        <div class="kicker mono">From the log</div>
+        <h2>Three questions over Noronha.</h2>
+        <p class="sub">Straight from the flight log, 19 September 2026, around Fernando de Noronha, 350 km off the coast of Brazil. Each answer arrived while the island was still in the window.</p>
+      </div>
+      <div class="log" role="list">
+        <header class="mono"><span>Flight 85 · SBFN</span><span>19 SEP 2026 · UTC</span></header>
+        <div class="turn" role="listitem">
+          <div class="tel mono">16:44:30 · HDG 270° · 783 FT AGL</div>
+          <p class="q">How long would it take from here to the mainland, to Brazil?<span class="pt">«Quanto tempo será que dá pra, daqui até o continente, Brasil?»</span></p>
+          <p class="a">From here to the Brazilian mainland it's about 350 km in a straight line. At your current 227 knots, that's roughly 50 minutes of flying.</p>
+        </div>
+        <div class="turn" role="listitem">
+          <div class="tel mono">16:45:20 · HDG 089° · 702 FT AGL</div>
+          <p class="q">And this beach down here?<span class="pt">«E essa praia aqui embaixo?»</span></p>
+          <p class="a">That's Praia do Leão, one of the wildest beaches on Noronha: pale sand, strong surf, and sea turtles that come ashore at night to lay their eggs.</p>
+        </div>
+        <div class="turn" role="listitem">
+          <div class="tel mono">16:46:55 · HDG 095° · 1,090 FT AGL</div>
+          <p class="q">And that rock up ahead, what is it? What's it called?<span class="pt">«E aquela pedra ali à frente, que que é? Qual é o nome dela?»</span></p>
+          <p class="a">That's Morro do Pico, the highest point on Fernando de Noronha at 323 metres and the island's best-known landmark. From here you can see its shape, like a finger pointing at the sky.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="kicker mono">What she does</div>
+      <h2>A friend in the right seat.</h2>
+      <div class="feats">
+        <article class="feat">
+          <figure><img src="img/helsinki.webp" alt="Painted postcard of Kallio, Helsinki, seen from the air" loading="lazy"></figure>
+          <h3>Knows where you're looking</h3>
+          <p>A small module inside the sim tells her where your head is pointed. “That church on the left” means the one you're actually looking at.</p>
+        </article>
+        <article class="feat">
+          <figure><img src="img/yokohama.webp" alt="Painted postcard of canals and towers in Nishi-ku, Yokohama" loading="lazy"></figure>
+          <h3>The real world, anywhere</h3>
+          <p>She looks places up in real-world maps, not the simulator's labels, so it works over Tokyo, the Amazon or a village you've never heard of.</p>
+        </article>
+        <article class="feat">
+          <figure><img src="img/cattolica.webp" alt="Painted postcard of the marina at San Giuliano Mare, Rimini" loading="lazy"></figure>
+          <h3>A map on your tablet</h3>
+          <p>Say where you want to go. The destination drops onto the EFB map with a line, distance and ETA, and she calls the heading on the same compass you read.</p>
+        </article>
+        <article class="feat">
+          <figure><img src="img/smiths-beach.webp" alt="Painted postcard of Smiths Beach, Victoria, with an aircraft wing in view" loading="lazy"></figure>
+          <h3>Hands stay on the stick</h3>
+          <p>One push-to-talk button on your HOTAS. No keyboard, no menus. Made for VR, where you can't see your keyboard, and just as easy on a monitor.</p>
+        </article>
+        <article class="feat">
+          <figure><img src="img/brisbane.webp" alt="Painted postcard of the Brisbane River at Newstead" loading="lazy"></figure>
+          <h3>Opens your videos</h3>
+          <p>“Track, roll the intro.” She welcomes your viewers and presents the region you're about to fly. Ask for a story and she'll tell one about the place below.</p>
+        </article>
+        <article class="feat">
+          <figure><img src="img/klamath.webp" alt="Painted postcard of the Klamath River valley in northern California" loading="lazy"></figure>
+          <h3>Speaks your language</h3>
+          <p>Ask in your own language and she answers in it, in nine languages:</p>
+          <ul class="langs" aria-label="Languages">
+            <li lang="pt-BR">Português <small>BR</small></li><li lang="pt-PT">Português <small>PT</small></li>
+            <li lang="en">English</li><li lang="es">Español</li><li lang="fr">Français</li>
+            <li lang="it">Italiano</li><li lang="de">Deutsch</li><li lang="ja">日本語</li><li lang="zh">中文</li>
+          </ul>
+        </article>
+      </div>
+      <div class="not">
+        <svg viewBox="0 0 1821.6 1242.2" aria-hidden="true"><path fill="#e10435" d="M1814.4,604.3c-7.9-8.1-6-7.9-72.1-7.9h-57.1c0,0-3.8-5.4-3.8-5.4-9-12.6-22.8-19.7-41-20.9l-8.8-.6v-87.1c0-55.3-.4-89-.9-92.2-3-15.8-15.1-29.4-30.2-34.1-8.9-2.8-40.2-2.8-50.9,0-18.4,4.7-33.5,17.1-41.1,33.7-2,4.3-11.2,37.4-26.1,93.3l-23.1,86.7h-464.9c-.9-3.9-2-7.6-3.1-11.3-1.9-8.3-4.7-16.1-8.2-24-7.8-19.9-20.4-43.3-46.6-64.4-20.8-16.8-44.6-28.2-68.1-35.9l181.8-182c175.2-175.3,185.2-185.5,187.7-191.1,3.6-8.4,4.7-16.1,3.4-24.4-4.7-29.8-36.8-45.5-64-31.2-3.7,2-44.5,42.3-177.7,175.2-2.2,2.2-4.4,4.4-6.6,6.6-18.5,18.5-36.9,36.9-55.4,55.4-12.4,12.4-23.9,25.1-36.3,37.4-28.9,28.8-57.7,57.7-86.6,86.5-16.1,16.1-31.2,34.1-48.3,49.1-.3.3-.6.5-1,.8-17.7-1.3-35.3-2.2-53.5-2.7-65.2-2.1-160.1-2.8-235.5,1.8-2.2-2.1-4.4-4.3-6.8-6.6-8.9-8.5-17.5-17.4-26.2-26-17.5-17.3-35-34.7-52.5-52.1-31-31-62-61.9-93-92.9-19.3-19.3-38.6-38.5-57.8-57.8C78.8,18.8,66.4,6.7,61.1,4.4,38.5-5.4,13.6,3.7,3.3,25.6.7,31,.3,33,0,41.7c-.4,11.6,1.1,17.4,6.9,26.1,2.1,3.1,61.9,63.4,148.7,149.9,33.5,33.4,67.9,66.4,101.3,99.7,32.2,32.2,64.1,64.9,96.2,97.1,0,0,8.7,8.7,15.4,15.4-23.3,6.2-42.2,15-61.1,28.3-45.7,32.1-59,74.9-67.1,101-6.6,21.2-8.7,40.9-8.4,59-.4,24.8,3.3,49.5,9.7,70.7,1.9,8.3,4.7,16.1,8.2,24,7.8,19.9,20.4,43.3,46.6,64.4,21.5,17.4,46.2,28.9,70.4,36.7l-13.9,13.9c-22.7,22.7-45.5,45.4-68.3,68.2-26.5,26.5-53,53-79.5,79.6-17,17-33.9,33.9-50.9,50.9C-1.8,1182.9,4.4,1176.2,1.2,1188.6c-1.4,5.3-1.6,15.2-.3,20.7,5.4,22.9,29.6,37.5,52.4,31.5,12.8-3.3,3.7,5.3,188.2-179.1,0-.4,1.7-1.7,2-1.9,16.5-16.4,32.9-32.9,49.4-49.3,25-25,50-50,75-75,27.3-27.2,53.6-54.8,81-81.9,7.9-7.8,16.1-15.7,25.1-22,15.4,1,30.9,1.8,46.8,2.3,68.8,2.2,170.8,2.8,248-2.6,3,2.3,5.8,4.8,8.6,7.4,21,18.9,39.6,40,59.5,59.9,19.5,19.4,38.9,38.9,58.4,58.4,23.6,23.5,47.1,47.1,70.7,70.6,11.5,11.5,22.9,22.9,34.4,34.4,161,160.9,173.2,173,179,175.7,37.2,17.7,75.5-20.6,57.8-57.8-2.8-5.8-15.6-18.8-187.2-190.5l-174.7-174.8c18.4-6,34.1-13.9,50-25,45.7-32.1,59-74.9,67.1-101,1.7-5.3,3-10.5,4.1-15.7l226,.2,236.4.2,23.1,86.3c12.6,47.5,23.7,88,24.7,90.2,7.3,16.8,21.5,29.7,38.8,35.4,6.9,2.3,9.3,2.6,26.2,2.9,12.1.3,20.5,0,23.9-.8,17.1-3.5,31.7-18.2,34.9-35,.6-3.1.9-37.9.9-92.3v-87.3h7.1c9.3,0,15.7-1.4,23.9-5.3,7.6-3.6,16.5-11.3,20.2-17.4l2.4-3.8h58c63.6,0,62.9,0,69.9-5.8,4.9-4.1,8.4-11.5,8.4-17.9s-1.8-12.4-7.1-18Z"/><path fill="#f2f2f2" d="M604.8,505v25.9l-91.4,209.3h-96.1l86-197.6h-108.9l15.1-37.6h195.2Z"/><path fill="#f2f2f2" d="M826.9,660.9c0,49.7-43,83.3-113.2,83.3s-78.3-9.4-102.5-34.9l20.8-26.5h5.7c16.5,15.8,39,23.5,62.2,23.5s36.3-9.4,36.3-30.6v-28.9c0-18.1-9.1-26.5-24.2-26.5s-20.8,3-32.6,9.4l-22.5-24.2,51.7-62.8h-88l14.8-37.6h181.4v24.9l-49.4,60.8c40.7,8.1,59.5,33.9,59.5,70.2Z"/></svg>
+        <p><strong>Not ATC. Not an autopilot.</strong>She never touches the controls and never talks to the tower. You fly; she's the one who knows what that is down there.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap cards-head">
+      <div>
+        <div class="kicker mono">Postcards from the right seat</div>
+        <h2>Every flight leaves postcards.</h2>
+      </div>
+      <p class="sub" style="max-width:26em">Painted from frames of real Track73 flights, at the moments we talked about the view.</p>
+    </div>
+    <div class="reel" aria-label="Postcards from past flights">
+      <ul id="reel"></ul>
+    </div>
+  </section>
+
+  <section class="join" id="join">
+    <img src="img/night-whangarei.webp" alt="" loading="lazy">
+    <div class="wrap">
+      <div>
+        <div class="kicker mono">Early access</div>
+        <h2>Save a seat on the first flight.</h2>
+        <p class="sub" style="color:#c9ced8">Track73 is flying every week and getting close. Leave your email and you'll hear first when it's ready for your sim, plus the new flight videos along the way.</p>
+      </div>
+      <form class="form" id="wl" novalidate>
+        <label for="wl-name">Name <input id="wl-name" name="name" autocomplete="name" placeholder="How should we call you?"></label>
+        <label for="wl-email">Email <input id="wl-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <button class="btn" type="submit" id="wl-btn">Join the waitlist</button>
+        <p class="msg" id="wl-msg" role="status" hidden></p>
+        <p class="fine">One email when it's ready, a few in between. No spam, and you can leave any time.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="mark" href="#"><svg aria-hidden="true"><use href="#t73"/></svg><b>Track<i>73</i></b></a>
+    <span>Made by a pilot for the <a href="#" id="channel">VRFlights73</a> channel · © 2026</span>
+  </div>
+</footer>
+
+<script>
+/* ---- the two things still to plug in ------------------------------------
+   YOUTUBE_ID  : the video id (the part after v= in the YouTube link)
+   GOOGLE_FORM : the form's /formResponse URL + the entry ids of its fields */
+const YOUTUBE_ID = "0p28hAwVqM4";   // S1E16 Lisbon — latest long episode
+const CHANNEL_URL = "https://www.youtube.com/@VRFlights73";
+const GOOGLE_FORM = { action: "", email: "", name: "" };
+
+const CARDS = [
+  ["itanhanga","hero-rio","Itanhangá, Rio de Janeiro","28 AUG 2026","-1.2deg"],
+  ["newstead","brisbane","Newstead, Brisbane","22 AUG 2026","1deg"],
+  ["kallio","helsinki","Kallio, Helsinki","12 SEP 2026","-.8deg"],
+  ["rosebud","rosebud","Rosebud, Victoria","30 AUG 2026","1.4deg"],
+  ["nishihara","shibuya","Nishihara, Tokyo","8 SEP 2026","-1deg"],
+  ["sangiuliano","cattolica","San Giuliano Mare, Rimini","27 AUG 2026",".9deg"],
+  ["klamath","klamath","Camp Klamath, California","23 AUG 2026","-1.3deg"],
+  ["sandspit","sandspit","Sandspit, New Zealand","16 SEP 2026","1.1deg"],
+  ["martha","mount-martha","Mount Martha, Victoria","25 AUG 2026","-.7deg"],
+  ["nishi","yokohama","Nishi-ku, Yokohama","6 SEP 2026","1.2deg"],
+  ["dargaville","dusk-dargaville","Dargaville, New Zealand","16 SEP 2026","-1deg"]
+];
+const reel = document.getElementById("reel");
+const card = ([, img, place, date, r], dup) =>
+  `<li><figure class="pc" style="--r:${r}"${dup ? ' aria-hidden="true"' : ""}>
+     <img src="img/${img}.webp" alt="${dup ? "" : "Painted postcard of " + place}" loading="lazy">
+     <figcaption><b>${place}</b><span>${date}</span></figcaption></figure></li>`;
+reel.innerHTML = CARDS.map(c => card(c, false)).join("") + CARDS.map(c => card(c, true)).join("");
+
+const poster = document.getElementById("poster");
+const canEmbed = /(^|\.)track73\.com\.br$|github\.io$|^localhost$/.test(location.hostname);
+if (YOUTUBE_ID && canEmbed) poster.addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("video").innerHTML =
+    `<iframe src="https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1" title="Track73 flight video"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+if (CHANNEL_URL) {
+  document.getElementById("channel").href = CHANNEL_URL;
+}
+
+const form = document.getElementById("wl");
+const msg = document.getElementById("wl-msg");
+const say = (text, err) => { msg.textContent = text; msg.classList.toggle("err", !!err); msg.hidden = false; };
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = form.email.value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say("That email doesn't look right. Check it and try again.", true); form.email.focus(); return; }
+  if (!GOOGLE_FORM.action) { say("The waitlist opens in a moment. The form isn't connected yet.", true); return; }
+  const btn = document.getElementById("wl-btn");
+  btn.disabled = true; btn.textContent = "Saving your seat…";
+  const body = new URLSearchParams({ [GOOGLE_FORM.email]: email });
+  if (GOOGLE_FORM.name) body.append(GOOGLE_FORM.name, form.name.value.trim());
+  try {
+    await fetch(GOOGLE_FORM.action, { method: "POST", mode: "no-cors", body });
+    form.reset();
+    say("You're on the list. See you on the first flight.");
+    btn.textContent = "You're in";
+  } catch {
+    say("Couldn't reach the waitlist. Check your connection and try again.", true);
+    btn.disabled = false; btn.textContent = "Join the waitlist";
+  }
+});
+</script>
