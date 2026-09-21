@@ -114,13 +114,15 @@ h2{font-size:clamp(44px,6.4vw,84px)}
 
 /* the real exchange */
 /* the three panel screens, each cycling on its own clock */
-.telas{margin:48px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.4vw,16px);transform:rotate(-4deg);transform-origin:left center}
+.telas{--out:0px;margin:48px 0 0 calc(-1 * var(--out));width:calc(100% + var(--out));display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.4vw,16px);transform:rotate(-4deg);transform-origin:left center}
 .tela{position:relative;aspect-ratio:384/500;border-radius:10px;overflow:hidden;background:#12161d;
   box-shadow:0 30px 60px -30px rgba(0,0,0,.9),0 0 0 1px var(--line)}
 .tela img{position:absolute;inset:0;width:100%;height:auto;opacity:0;transition:opacity .35s ease}
 .tela img.on{opacity:1}
 .telas figcaption{grid-column:1/-1;color:var(--mute);font-size:11px;margin-top:40px;transform:rotate(4deg);transform-origin:left}
 @media (prefers-reduced-motion:reduce){.tela img{transition:none}}
+/* wide screens: the panels spill left past the column into the empty margin, bigger and readable */
+@media (min-width:1000px){.telas{--out:min(300px, max(0px, (100vw - 1180px) / 2 - 8px))}}
 .radio{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,72px);align-items:start}
 .log{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,32px);display:grid;gap:22px}
 .log header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute);padding-bottom:16px;border-bottom:1px dashed var(--line)}
