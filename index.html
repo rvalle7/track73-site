@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Track73</title>
 <meta name="description" content="Track73 — a voice companion for Microsoft Flight Simulator 2024. Ask about anything out the window.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 560'%3E%3Crect fill='%23e10435' width='560' height='560' rx='40'/%3E%3Cpath fill='%23f2f2f2' d='M269.1,160.4v25.9l-91.4,209.3h-96.1l86-197.6H58.7l15.1-37.6h195.3Z'/%3E%3Cpath fill='%23f2f2f2' d='M491.3,316.3c0,49.7-43,83.3-113.2,83.3s-78.3-9.4-102.5-34.9l20.8-26.5h5.7c16.5,15.8,39,23.5,62.2,23.5s36.3-9.4,36.3-30.6v-28.9c0-18.1-9.1-26.5-24.2-26.5s-20.8,3-32.6,9.4l-22.5-24.2,51.7-62.8h-88l14.8-37.6h181.4v24.9l-49.4,60.8c40.7,8.1,59.5,33.9,59.5,70.2h0Z'/%3E%3C/svg%3E">
@@ -137,7 +141,7 @@ h2{font-size:clamp(44px,6.4vw,84px)}
 /* postcards */
 .cards-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
 .reel{margin-top:44px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.reel ul{list-style:none;margin:0;padding:0 0 8px;display:flex;gap:18px;width:max-content;animation:reel 80s linear infinite}
+.reel ul{list-style:none;margin:0;padding:0 0 8px;display:flex;gap:18px;width:max-content;animation:reel 160s linear infinite}
 .reel:hover ul{animation-play-state:paused}
 @keyframes reel{to{transform:translateX(-50%)}}
 .pc{width:clamp(260px,30vw,380px);background:#f4efe4;color:#2b2a27;padding:10px 10px 12px;border-radius:4px;box-shadow:0 18px 40px -18px rgba(0,0,0,.9);transform:rotate(var(--r,0deg))}
@@ -322,11 +326,12 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
         <div class="kicker mono">Postcards from the right seat</div>
         <h2>Every flight leaves postcards.</h2>
       </div>
-      <p class="sub" style="max-width:26em">Painted from frames of real Track73 flights, at the moments we talked about the view.</p>
+      <p class="sub" style="max-width:28em">Ask Track for a photo and she frames the moment as a postcard: the real image from your flight, with the place, the date and the coordinates, saved to your Pictures folder.</p>
     </div>
     <div class="reel" aria-label="Postcards from past flights">
       <ul id="reel"></ul>
     </div>
+    <div class="wrap"><p class="note" style="margin-top:22px">The paintings above are our own. We turn some of those postcards into art for the channel. Track saves the real frame from your flight, not a painting.</p></div>
   </section>
 
   <section class="join" id="join">
@@ -375,7 +380,18 @@ const CARDS = [
   ["sandspit","sandspit","Sandspit, New Zealand","16 SEP 2026","1.1deg"],
   ["martha","mount-martha","Mount Martha, Victoria","25 AUG 2026","-.7deg"],
   ["nishi","yokohama","Nishi-ku, Yokohama","6 SEP 2026","1.2deg"],
-  ["dargaville","dusk-dargaville","Dargaville, New Zealand","16 SEP 2026","-1deg"]
+  ["dargaville","dusk-dargaville","Dargaville, New Zealand","16 SEP 2026","-1deg"],
+  ["montpellier","montpellier","Montpellier, France","21 AUG 2026","1.1deg"],
+  ["kyoto","kyoto","Nakagyo, Kyoto","11 SEP 2026","-.9deg"],
+  ["portsea","portsea","Portsea, Victoria","30 AUG 2026","1.3deg"],
+  ["providence","providence","Providence River, Rhode Island","21 AUG 2026","-1.2deg"],
+  ["sapporo","sapporo","Higashi-ku, Sapporo","6 SEP 2026",".8deg"],
+  ["misano","misano","Misano Adriatico, Rimini","27 AUG 2026","-1deg"],
+  ["osaka","osaka","Minato-ku, Osaka","14 SEP 2026","1.2deg"],
+  ["oldstation","old-station","Old Station, California","30 AUG 2026","-.7deg"],
+  ["paestum","paestum","Capaccio Paestum, Salerno","28 AUG 2026","1deg"],
+  ["sendai","sendai","Izumi-ku, Sendai","28 AUG 2026","-1.3deg"],
+  ["toowoomba","toowoomba","Mount Kynoch, Toowoomba","24 AUG 2026",".9deg"]
 ];
 const reel = document.getElementById("reel");
 const card = ([, img, place, date, r], dup) =>
