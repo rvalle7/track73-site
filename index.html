@@ -113,6 +113,16 @@ h2{font-size:clamp(44px,6.4vw,84px)}
 .note sup{font-size:1em;margin:0 4px 0 0}
 
 /* the real exchange */
+/* the three panel screens, each cycling on its own clock */
+.telas{margin:48px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.4vw,16px);transform:rotate(-4deg) skewY(-2deg);transform-origin:left center}
+.tela{position:relative;aspect-ratio:384/500;border-radius:10px;overflow:hidden;background:#12161d;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.9),0 0 0 1px var(--line)}
+.tela:nth-child(2){transform:translateY(18px)}
+.tela:nth-child(3){transform:translateY(36px)}
+.tela img{position:absolute;inset:0;width:100%;height:auto;opacity:0;transition:opacity .35s ease}
+.tela img.on{opacity:1}
+.telas figcaption{grid-column:1/-1;color:var(--mute);font-size:11px;margin-top:52px;transform:skewY(2deg) rotate(4deg);transform-origin:left}
+@media (prefers-reduced-motion:reduce){.tela img{transition:none}}
 .radio{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,72px);align-items:start}
 .log{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,32px);display:grid;gap:22px}
 .log header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute);padding-bottom:16px;border-bottom:1px dashed var(--line)}
@@ -249,6 +259,12 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
         <div class="kicker mono">From the log</div>
         <h2>Three questions over Noronha.</h2>
         <p class="sub">Straight from the flight log, 19 September 2026, around Fernando de Noronha, 350 km off the coast of Brazil. Each answer arrived while the island was still in the window.</p>
+        <figure class="telas" aria-label="The Track73 settings panel: General, Languages and Modes, in several of its nine languages">
+          <div class="tela" aria-hidden="true"><img src="img/panel-voz_0.webp" alt="" loading="lazy" class="on"><img src="img/panel-voz_1.webp" alt="" loading="lazy"><img src="img/panel-voz_2.webp" alt="" loading="lazy"><img src="img/panel-voz_3.webp" alt="" loading="lazy"></div>
+          <div class="tela" aria-hidden="true"><img src="img/panel-linguas_0.webp" alt="" loading="lazy" class="on"><img src="img/panel-linguas_1.webp" alt="" loading="lazy"><img src="img/panel-linguas_2.webp" alt="" loading="lazy"><img src="img/panel-linguas_3.webp" alt="" loading="lazy"></div>
+          <div class="tela" aria-hidden="true"><img src="img/panel-modos_0.webp" alt="" loading="lazy" class="on"><img src="img/panel-modos_1.webp" alt="" loading="lazy"><img src="img/panel-modos_2.webp" alt="" loading="lazy"><img src="img/panel-modos_3.webp" alt="" loading="lazy"></div>
+          <figcaption class="mono">The settings panel · 9 languages</figcaption>
+        </figure>
       </div>
       <div class="log" role="list">
         <header class="mono"><span>Flight 85 · SBFN</span><span>19 SEP 2026 · UTC</span></header>
@@ -459,4 +475,18 @@ form.addEventListener("submit", async (e) => {
     el.hidden = false;
   } catch {}
 })();
+
+/* settings panels: each screen flips to another configuration on its own random clock */
+document.querySelectorAll(".tela").forEach((tela) => {
+  const imgs = [...tela.querySelectorAll("img")];
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || imgs.length < 2) return;
+  let i = 0;
+  const next = () => {
+    imgs[i].classList.remove("on");
+    i = (i + 1 + Math.floor(Math.random() * (imgs.length - 1))) % imgs.length;
+    imgs[i].classList.add("on");
+    setTimeout(next, 1400 + Math.random() * 2600);
+  };
+  setTimeout(next, 800 + Math.random() * 2000);
+});
 </script>
