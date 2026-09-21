@@ -193,6 +193,7 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .reel{overflow-x:auto}
+  .reel li.dup{display:none}  /* the copy only exists for the loop; scrolled by hand, each postcard shows once */
 }
 </style>
 
@@ -392,30 +393,42 @@ const GOOGLE_FORM = { action: "https://docs.google.com/forms/d/e/1FAIpQLSfzMu-nL
 const CARDS = [
   ["itanhanga","hero-rio","Itanhangá, Rio de Janeiro","28 AUG 2026","-1.2deg"],
   ["newstead","brisbane","Newstead, Brisbane","22 AUG 2026","1deg"],
+  ["albany","albany-capitol","Center Square, Albany","23 AUG 2026","-.8deg"],
   ["kallio","helsinki","Kallio, Helsinki","12 SEP 2026","-.8deg"],
   ["rosebud","rosebud","Rosebud, Victoria","30 AUG 2026","1.4deg"],
+  ["chester","chester","Chester, California","30 AUG 2026",".9deg"],
   ["nishihara","shibuya","Nishihara, Tokyo","8 SEP 2026","-1deg"],
   ["sangiuliano","cattolica","San Giuliano Mare, Rimini","27 AUG 2026",".9deg"],
+  ["sendaistadium","sendai-stadium","Miyagino-ku, Sendai","28 AUG 2026","-.8deg"],
   ["klamath","klamath","Camp Klamath, California","23 AUG 2026","-1.3deg"],
   ["sandspit","sandspit","Sandspit, New Zealand","16 SEP 2026","1.1deg"],
+  ["griffin","griffin","Griffin, Queensland","26 AUG 2026",".9deg"],
   ["martha","mount-martha","Mount Martha, Victoria","25 AUG 2026","-.7deg"],
   ["nishi","yokohama","Nishi-ku, Yokohama","6 SEP 2026","1.2deg"],
+  ["aucklandbridge","auckland-bridge","Saint Marys Bay, Auckland","16 SEP 2026","-.8deg"],
   ["dargaville","dusk-dargaville","Dargaville, New Zealand","16 SEP 2026","-1deg"],
   ["montpellier","montpellier","Montpellier, France","21 AUG 2026","1.1deg"],
+  ["scituate","scituate","Scituate, Rhode Island","22 AUG 2026",".9deg"],
   ["kyoto","kyoto","Nakagyo, Kyoto","11 SEP 2026","-.9deg"],
   ["portsea","portsea","Portsea, Victoria","30 AUG 2026","1.3deg"],
+  ["smiths","smiths-beach","Smiths Beach, Victoria","30 AUG 2026","-.8deg"],
   ["providence","providence","Providence River, Rhode Island","21 AUG 2026","-1.2deg"],
   ["sapporo","sapporo","Higashi-ku, Sapporo","6 SEP 2026",".8deg"],
+  ["sendairainbow","sendai-rainbow","Aoba-ku, Sendai","28 AUG 2026",".9deg"],
   ["misano","misano","Misano Adriatico, Rimini","27 AUG 2026","-1deg"],
   ["osaka","osaka","Minato-ku, Osaka","14 SEP 2026","1.2deg"],
+  ["paynes","paynes-creek","Paynes Creek, California","30 AUG 2026","-.8deg"],
   ["oldstation","old-station","Old Station, California","30 AUG 2026","-.7deg"],
   ["paestum","paestum","Capaccio Paestum, Salerno","28 AUG 2026","1deg"],
+  ["sandgate","sandgate","Sandgate, Brisbane","26 AUG 2026",".9deg"],
   ["sendai","sendai","Izumi-ku, Sendai","28 AUG 2026","-1.3deg"],
-  ["toowoomba","toowoomba","Mount Kynoch, Toowoomba","24 AUG 2026",".9deg"]
+  ["toowoomba","toowoomba","Mount Kynoch, Toowoomba","24 AUG 2026",".9deg"],
+  ["albanyplaza","albany-plaza","Liberty Park, Albany","23 AUG 2026","-.8deg"],
+  ["greenhithe","night-whangarei","Greenhithe, Auckland","16 SEP 2026","1.3deg"]
 ];
 const reel = document.getElementById("reel");
 const card = ([, img, place, date, r], dup) =>
-  `<li><figure class="pc" style="--r:${r}"${dup ? ' aria-hidden="true"' : ""}>
+  `<li${dup ? ' class="dup"' : ""}><figure class="pc" style="--r:${r}"${dup ? ' aria-hidden="true"' : ""}>
      <img src="img/${img}.webp" alt="${dup ? "" : "Painted postcard of " + place}" loading="lazy">
      <figcaption><b>${place}</b><span>${date}</span></figcaption></figure></li>`;
 reel.innerHTML = CARDS.map(c => card(c, false)).join("") + CARDS.map(c => card(c, true)).join("");
