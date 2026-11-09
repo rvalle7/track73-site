@@ -183,6 +183,14 @@ footer{border-top:1px solid var(--line);padding-block:36px calc(36px + env(safe-
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;color:var(--mute);font-size:14px}
 footer .visits{font-size:12px;letter-spacing:.08em}
 footer .visits b{color:var(--paper);font-weight:500}
+footer .brand-foot{display:flex;align-items:center;gap:26px}
+footer .brand-foot a{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.5);text-decoration:none;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.6))}
+footer .brand-foot a:hover{color:rgba(255,255,255,.88)}
+footer .brand-foot span{font-size:8px;letter-spacing:.16em;font-weight:300;white-space:nowrap}
+footer .brand-foot img{height:24px;width:auto;display:block;opacity:.78}
+footer .brand-foot a:hover img{opacity:1}
+footer .brand-foot svg{height:24px;width:auto;display:block}
+footer .brand-foot svg path{fill:currentColor}
 footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offset:4px}
 
 @media (max-width:860px){
@@ -376,7 +384,19 @@ footer a{color:var(--paper);text-decoration-color:var(--red);text-underline-offs
 <footer>
   <div class="wrap">
     <a class="mark" href="#"><svg aria-hidden="true"><use href="#t73"/></svg><b>Track<i>73</i></b></a>
-    <span>Made by a pilot for the <a href="#" id="channel">VRFlights73</a> channel · © 2026</span>
+    <nav class="brand-foot" id="brandfoot" aria-label="Credits">
+      <a href="https://dreamtools.com.br" target="_blank" rel="noopener" aria-label="created by Dreamtools">
+        <span>created by</span>
+        <img src="img/mark-dreamtools.svg" alt="">
+      </a>
+      <a href="#" aria-label="fly with Track">
+        <span>fly with</span>
+        <svg viewBox="-31.92 -214.79 803.51 246.93" aria-hidden="true">
+          <rect x="-27.07" y="-209.94" width="793.81" height="237.23" rx="19.75" fill="none" stroke="currentColor" stroke-width="9.7"/>
+          <path d="M98.0452734375 -110.84736328125H66.09208984375V6.14083984375H34.13890625V-110.84736328125H2.081640625V-142.800546875H98.0452734375Z M162.05572265625 -113.016640625V-139.66164062500002H140.71890625V-113.016640625ZM194.00890625 -22.6734375H162.05572265625V-81.06345703125H140.71890625V-22.6734375H108.76572265624999V-171.71890625H172.67208984374997L194.00890625 -150.38208984375V-111.9758203125L179.12517578125 -97.09208984375L194.00890625 -82.208359375Z M256.24996093749996 -73.6736328125 248.3397265625 -119.88605468749999 240.53357421875 -73.6736328125ZM297.36236328125 -20.591796875H265.4091796875L261.76630859375 -41.6163671875H234.91314453125L231.27027343749998 -20.591796875H199.52525390625L227.1069921875 -169.53318359375H269.67654296875Z M388.0178125 -58.6858203125 366.68099609374997 -37.34900390625H324.1114453125L302.77462890625 -58.6858203125V-165.2658203125L324.1114453125 -186.60263671875H366.68099609374997L388.0178125 -165.2658203125V-133.31263671875H356.06462890625V-154.64945312499998H334.72781249999997V-69.40626953124999H356.06462890625V-90.63900390625H388.0178125Z M490.33044921875 -39.5347265625H458.377265625L437.04044921875 -99.17373046875V-39.5347265625H405.087265625V-188.788359375H437.04044921875V-129.0452734375L458.377265625 -188.788359375H490.33044921875L463.68544921875 -114.16154296875Z M635.2834125 -112.92900390625 584.17913515625 4.05919921875H547.85450625L599.0628656250001 -112.92900390625H571.3770453125001V-102.31263671875H539.3197796875V-144.98626953125H635.2834125Z M737.5960492187501 -31.953183593749998 716.2592328125 -10.6163671875H673.5856000000001L650.1671429687501 -34.13890625V-53.29H684.3060492187501V-42.6736328125H705.53878359375V-69.3186328125H684.3060492187501V-101.27181640625H705.53878359375V-127.91681640624999H684.3060492187501V-117.1963671875H652.2487835937501V-138.53318359375L673.5856000000001 -159.87H716.2592328125L737.5960492187501 -138.53318359375V-100.23099609375L722.60823671875 -85.24318359375L737.5960492187501 -70.359453125Z"/>
+        </svg>
+      </a>
+    </nav>
     <span class="mono visits" id="visits" hidden></span>
   </div>
 </footer>
@@ -448,7 +468,7 @@ if (canEmbed) document.querySelectorAll(".eps a[data-yt]").forEach(a => a.addEve
   document.getElementById("video").scrollIntoView({ behavior: "smooth", block: "center" });
 }));
 if (CHANNEL_URL) {
-  document.getElementById("channel").href = CHANNEL_URL;
+  const ch = document.getElementById("channel"); if (ch) ch.href = CHANNEL_URL;
 }
 
 const form = document.getElementById("wl");
@@ -477,6 +497,9 @@ form.addEventListener("submit", async (e) => {
 /* visit counter: one hit per browser (abacus.jasoncameron.dev, no account) */
 (async () => {
   if (!/(^|\.)track73\.com\.br$/.test(location.hostname)) return;
+  let me = false;
+  try { const q = new URLSearchParams(location.search); if (q.has("eu")) localStorage.setItem("t73-me", q.get("eu") === "0" ? "0" : "1"); me = localStorage.getItem("t73-me") === "1"; if (me) localStorage.setItem("t73-seen", "1"); } catch {}
+  if (!me) { try { if (localStorage.getItem("t73-seen") !== "1") await fetch("https://abacus.jasoncameron.dev/hit/track73.com.br/visitors"); localStorage.setItem("t73-seen", "1"); } catch {} return; }
   const base = "https://abacus.jasoncameron.dev";
   let seen = false;
   try { seen = localStorage.getItem("t73-seen") === "1"; } catch {}
